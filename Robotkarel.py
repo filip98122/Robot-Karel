@@ -54,12 +54,24 @@ class Loptica:
         self.y=y
         self.pokupljen=False
 class Polje:
-    def __init__(self,x,y):
+    def __init__(self,x,y,gornja,donja,desna,leva):
         self.x=x
         self.y=y
-        
-
-
+        self.gornja=gornja
+        self.donja=donja
+        self.desna=desna
+        self.leva=leva
+        self.img=pygame.image.load("polje.png")
+        h=76.5
+        w=76.5
+        self.img1=pygame.transform.scale(self.img,(w,h))
+    def draw(self,window):
+        window.blit(self.img,(self.x,self.y))
+     
+     
+     
+     
+     
 while True:
     keys = pygame.key.get_pressed()
     events = pygame.event.get()
@@ -72,7 +84,6 @@ while True:
         exit()
     
     #Kod ovde
-    
     
     
     
