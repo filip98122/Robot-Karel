@@ -2,7 +2,6 @@ import pygame
 import time
 import math
 pygame.init()
-pygame.mixer.init()
 def collison(x1,y1,r1,x2,y2,r2):
     dx = x2 - x1
     dy = y2 - y1
@@ -40,36 +39,29 @@ class Karel:
         self.strana=strana
         self.loptice=loptice
     def draw(self,window):
-        if self.loptice>0:
-            img=pygame.image.load(f"karel{self.strana}pop")
-        else:
-            img=pygame.image.load(f"karel{self.strana}pra")
-        w=img.get_height()
-        h=img.get_height()
+        img=pygame.image.load(f"karel{self.strana}.png")
+        w=65
+        h=65
         scldimg=pygame.transform.scale(img, (w, h))
-        window.blit(scldimg,(self.x,self.y))
+        window.blit(scldimg,(self.x+7,self.y+7))
 class Loptica:
     def __init__(self,x,y):
         self.x=x
         self.y=y
         self.pokupljen=False
 class Polje:
-    def __init__(self,x,y,gornja,donja,desna,leva):
+    def __init__(self,x,y):
         self.x=x
         self.y=y
-        self.gornja=gornja
-        self.donja=donja
-        self.desna=desna
-        self.leva=leva
         self.img=pygame.image.load("polje.png")
-        h=76.5
-        w=76.5
+        h=765
+        w=765
         self.img1=pygame.transform.scale(self.img,(w,h))
     def draw(self,window):
-        window.blit(self.img,(self.x,self.y))
+        window.blit(self.img1,(self.x,self.y))
      
-     
-     
+bckg=Polje(0,0)
+karel=Karel(0,153,"d",0)
      
      
 while True:
@@ -82,10 +74,24 @@ while True:
             exit()
     if keys[pygame.K_ESCAPE]:
         exit()
-    
+    window.fill("white")
     #Kod ovde
+    bckg.draw(window)
+    for i in range(11):
+        if i == 0 or i ==10:
+            w=15
+            pygame.draw.line(window,(0,0,0),(i*76.5,153),(i*76.5,765),w)
+        else:
+            w=5
+            pygame.draw.line(window,(50,50,50),(i*76.5,153),(i*76.5,765),w)
+    for i in range(9):
+        if i == 0 or i ==10:
+            w=15
+            pygame.draw.line(window,(0,0,0),(0,153+i*76.5),(765,153+i*76.5),w)
+        else:
+            w=5
+            pygame.draw.line(window,(50,50,50),(0,153+i*76.5),(765,153+i*76.5),w)
     
-    
-    
+    karel.draw(window)
     pygame.display.update()
     clock.tick(60)
