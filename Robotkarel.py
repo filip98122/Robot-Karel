@@ -1,6 +1,8 @@
 import pygame
 import time
 import math
+
+import pygame.tests
 pygame.init()
 def collison(x1,y1,r1,x2,y2,r2):
     dx = x2 - x1
@@ -16,6 +18,28 @@ def colision1(rect1 : pygame.Rect,rect2):
     if rect1.colliderect(rect2):
         return True
     return False
+
+
+def pokupi():
+    global vedrict
+    for i in range(len(l_l)):
+        if karel.x==l_l[i].x and karel.y==l_l[i].y:
+            if l_l[i].state==1:
+                l_l[i].state=2
+                break
+        else:
+            dugme.wait=59
+            dugme.line=len(dugme.lines)-1
+            vedrict="Nema loptice"
+
+
+vedrict=""
+font=pygame.sysfont.SysFont("B",45)
+txt= font.render(f"{vedrict}", True, (15, 15, 15))
+w=txt.get_width()
+h=txt.get_height()
+
+
 
 def napred():
     dole=False
@@ -49,24 +73,28 @@ def napred():
         else:
             dugme.wait=59
             dugme.line=len(dugme.lines)-1
+            vedrict="Karl ne moze da prodje"
     if karel.strana==2:
         if gore==False:
             karel.y-=HEIGHT/10
         else:
             dugme.wait=59
             dugme.line=len(dugme.lines)-1
+            vedrict="Karl ne moze da prodje"
     if karel.strana==1:
         if desno==False:
             karel.x+=WIDTH/10
         else:
             dugme.wait=59
             dugme.line=len(dugme.lines)-1
+            vedrict="Karl ne moze da prodje"
     if karel.strana==3:
         if levo==False:
             karel.x-=WIDTH/10
         else:
             dugme.wait=59
             dugme.line=len(dugme.lines)-1
+            vedrict="Karl ne moze da prodje"
 def desno():
     karel.strana-=1
     if karel.strana<0:
@@ -78,9 +106,34 @@ def levo():
     karel.strana+=1
     if karel.strana>3:
         karel.strana-=4
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 clock = pygame.time.Clock()
-WIDTH,HEIGHT = 1000,770
+WIDTH,HEIGHT = 765,765
 window = pygame.display.set_mode((WIDTH,HEIGHT))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def highlight(width,height,x,y,mousePos):
     if mousePos[0] > x and mousePos[0] < x + width and mousePos[1] > y and mousePos[1] < y + height:
         return True
@@ -123,7 +176,8 @@ class Loptica:
         self.h=HEIGHT/30.6
         self.scldimg=pygame.transform.scale(pygame.image.load("loptica.png"),(self.w,self.h))
     def draw(s,window):
-        window.blit(s.scldimg,(s.x+s.w,s.y+s.w))
+        if s.state==1:
+            window.blit(s.scldimg,(s.x+s.w,s.y+s.h))
 class Polje:
     def __init__(self,x,y):
         self.x=x
@@ -135,6 +189,8 @@ class Polje:
     def draw(self,window):
         window.blit(self.img1,(self.x,self.y))
 #/
+
+
 l_z=[
     Zid((WIDTH/10),(HEIGHT/10)*4,(WIDTH/10),(HEIGHT/10)*5)
     
@@ -173,12 +229,14 @@ class Dugme:
         s.c=False
     def draw_and_check(s,window):
         global karel
+        global vedrict
         window.blit(s.scaled_img,(WIDTH//2-s.w//2,HEIGHT/100))
         if button_colision(s.w,s.h,WIDTH//2-s.w//2,HEIGHT/100,mousePos,mouseState):
             if s.holding==False:
                 if s.wait==1:
                     with open("kodovde.py") as file:
                         s.lines = file.readlines()
+                    vedrict=""
                     s.wait=len(s.lines)*60
                     s.wait+=59
                     s.c=True
@@ -205,20 +263,41 @@ while True:
     bckg.draw(window)
     for i in range(11):
         if i ==10:
-            w=WIDTH//51
-            pygame.draw.line(window,(0,0,0),(i*(WIDTH/10),HEIGHT/5),(i*(WIDTH/10),HEIGHT),w)
-            pygame.draw.line(window,(0,0,0),(0,HEIGHT/5),(0,HEIGHT),w)
+            w1=WIDTH//51
+            pygame.draw.line(window,(0,0,0),(i*(WIDTH/10),HEIGHT/5),(i*(WIDTH/10),HEIGHT),w1)
+            pygame.draw.line(window,(0,0,0),(0,HEIGHT/5),(0,HEIGHT),w1)
         else:
-            w=WIDTH//153
-            pygame.draw.line(window,(120,120,120),(i*(WIDTH/10),HEIGHT/5),(i*(WIDTH/10),HEIGHT),w)
+            w1=WIDTH//153
+            pygame.draw.line(window,(120,120,120),(i*(WIDTH/10),HEIGHT/5),(i*(WIDTH/10),HEIGHT),w1)
     for i in range(9):
         if i ==8:
-            w=HEIGHT//51
-            pygame.draw.line(window,(0,0,0),(0,HEIGHT/5),(WIDTH,HEIGHT/5),w//2)
-            pygame.draw.line(window,(0,0,0),(0,HEIGHT/5+i*HEIGHT/10),(WIDTH,HEIGHT/5+i*HEIGHT/10),w)
+            w1=HEIGHT//51
+            pygame.draw.line(window,(0,0,0),(0,HEIGHT/5),(WIDTH,HEIGHT/5),w1//2)
+            pygame.draw.line(window,(0,0,0),(0,HEIGHT/5+i*HEIGHT/10),(WIDTH,HEIGHT/5+i*HEIGHT/10),w1)
         else:
-            w=HEIGHT//153
-            pygame.draw.line(window,(120,120,120),(0,HEIGHT/5+i*HEIGHT/10),(WIDTH,HEIGHT/5+i*HEIGHT/10),w)
+            
+            w1=HEIGHT//153
+            pygame.draw.line(window,(120,120,120),(0,HEIGHT/5+i*HEIGHT/10),(WIDTH,HEIGHT/5+i*HEIGHT/10),w1)
+    if dugme.wait==59:
+        font=pygame.sysfont.SysFont("B",45)
+        if vedrict=="":
+            vedrict="Resenje prihvaceno!"
+        txts = font.render(f"{vedrict}", True, (15, 15, 15))
+        w=len(vedrict)*(WIDTH/47.56476683937825)
+        h=HEIGHT/24.67741935483871
+        txt=pygame.transform.scale(txts,(w,h))
+        
+    
+    if dugme.wait<=59:
+        window.blit(txt,((WIDTH/2)-(w/2),(HEIGHT/10)*2-((HEIGHT/100)+dugme.h)))
+    
+    
+    
+    
+    
+    
+    
+    
     dugme.draw_and_check(window)
     if dugme.c==True:
         if dugme.wait%60==0:
